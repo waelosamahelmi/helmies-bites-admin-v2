@@ -21,9 +21,10 @@ import { StripeSettingsModal } from "@/components/stripe-settings-modal-new";
 interface PaymentMethodsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenStripeSettings?: () => void;
 }
 
-export function PaymentMethodsModal({ isOpen, onClose }: PaymentMethodsModalProps) {
+export function PaymentMethodsModal({ isOpen, onClose, onOpenStripeSettings }: PaymentMethodsModalProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
   
@@ -89,8 +90,9 @@ export function PaymentMethodsModal({ isOpen, onClose }: PaymentMethodsModalProp
 
       // Save payment settings to database
       await updateSettings.mutateAsync({
-        paymentMethods: paymentMethods,
-        stripeEnabled: onlinePaymentEnabled,
+        id: restaurantSettings?.id || 1,
+        payment_methods: paymentMethods,
+        stripe_enabled: onlinePaymentEnabled,
       });
 
       toast({

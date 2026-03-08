@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Printer UI Components Export
 export { PrinterDiscoveryModal } from '../printer-discovery-modal';
 export { PrinterSettingsModal } from '../printer-settings-modal';

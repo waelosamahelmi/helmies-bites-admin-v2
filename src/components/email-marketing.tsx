@@ -231,7 +231,7 @@ export function EmailMarketing() {
       // Get branch info and restaurant config
       const branch = branches?.find(b => b.id === selectedBranch);
       const logoUrl = (restaurantConfig?.logo as any)?.imageUrl || 'https://ravintolababylon.fi/wp-content/uploads/2023/06/logo-header-01.webp';
-      const socialMedia = (restaurantConfig?.socialMedia || {}) as any;
+      const socialMedia = (restaurantConfig?.social_media || {}) as any;
       
       // Build social media icons HTML
       let socialMediaHtml = '<div style="margin-top: 20px;">';
@@ -596,18 +596,18 @@ export function EmailMarketing() {
                 )}
                 {/* Social Media Icons */}
                 <div className="flex justify-center gap-3 mt-4">
-                  {(restaurantConfig?.socialMedia as any)?.facebook && (
-                    <a href={(restaurantConfig.socialMedia as any).facebook} className="inline-block">
+                  {(restaurantConfig?.social_media as any)?.facebook && (
+                    <a href={(restaurantConfig?.social_media as any).facebook} className="inline-block">
                       <Facebook className="w-7 h-7 text-blue-600" />
                     </a>
                   )}
-                  {(restaurantConfig?.socialMedia as any)?.instagram && (
-                    <a href={(restaurantConfig.socialMedia as any).instagram} className="inline-block">
+                  {(restaurantConfig?.social_media as any)?.instagram && (
+                    <a href={(restaurantConfig?.social_media as any).instagram} className="inline-block">
                       <Instagram className="w-7 h-7 text-pink-600" />
                     </a>
                   )}
-                  {(restaurantConfig?.socialMedia as any)?.website && (
-                    <a href={(restaurantConfig.socialMedia as any).website} className="inline-block">
+                  {(restaurantConfig?.social_media as any)?.website && (
+                    <a href={(restaurantConfig?.social_media as any).website} className="inline-block">
                       <Globe className="w-7 h-7 text-gray-600" />
                     </a>
                   )}

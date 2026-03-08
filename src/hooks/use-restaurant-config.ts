@@ -23,6 +23,11 @@ export interface RestaurantConfig {
   hero?: any;
   heroVideo?: any;
   services?: any;
+  social_media?: any;
+  hours?: any;
+  delivery_config?: any;
+  about?: any;
+  page_layout_variants?: any;
   is_active: boolean;
   created_at?: string;
   updated_at?: string;

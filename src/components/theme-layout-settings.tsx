@@ -297,8 +297,8 @@ export function ThemeLayoutSettings({ onClose }: ThemeLayoutSettingsProps) {
   // Load existing config
   useEffect(() => {
     if (restaurantConfig) {
-      const pageLayoutVariants = typeof restaurantConfig.pageLayoutVariants === 'object' && restaurantConfig.pageLayoutVariants !== null
-        ? restaurantConfig.pageLayoutVariants as PageLayoutVariants
+      const pageLayoutVariants = typeof restaurantConfig.page_layout_variants === 'object' && restaurantConfig.page_layout_variants !== null
+        ? restaurantConfig.page_layout_variants as PageLayoutVariants
         : {
             home: 'variant1' as LayoutVariant,
             menu: 'variant1' as LayoutVariant,

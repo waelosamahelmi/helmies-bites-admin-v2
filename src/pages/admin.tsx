@@ -926,7 +926,7 @@ export default function Admin() {
     return colors[status] || "bg-gray-100 text-gray-800";
   };
 
-  const filteredOrders = orders?.filter(order => {
+  const filteredOrders = orders?.filter((order: any) => {
     const matchesStatus = statusFilter === "all" || order.status === statusFilter;
     const matchesSearch = searchTerm === "" || 
       order.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -934,7 +934,7 @@ export default function Admin() {
     return matchesStatus && matchesSearch;
   }) || [];
 
-  const filteredMenuItems = menuItems?.filter(item => {
+  const filteredMenuItems = menuItems?.filter((item: any) => {
     const matchesCategory = selectedCategory === "all" || item.categoryId?.toString() === selectedCategory;
     const matchesSearch = searchTerm === "" || 
       item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -943,7 +943,7 @@ export default function Admin() {
       (availabilityFilter === "enabled" && item.isAvailable) ||
       (availabilityFilter === "disabled" && !item.isAvailable);
     return matchesCategory && matchesSearch && matchesAvailability;
-  }).sort((a, b) => {
+  }).sort((a: any, b: any) => {
     // Sort by displayOrder first, then by ID as fallback
     const orderA = a.displayOrder ?? 999999;
     const orderB = b.displayOrder ?? 999999;
@@ -953,13 +953,13 @@ export default function Admin() {
     return a.id - b.id;
   }) || [];
   // Calculate stats
-  const todayOrders = filteredOrders.filter(order => {
+  const todayOrders = filteredOrders.filter((order: any) => {
     const today = new Date().toDateString();
     return order.createdAt && new Date(order.createdAt).toDateString() === today;
   });
 
-  const pendingOrders = filteredOrders.filter(order => order.status === "pending");
-  const todayRevenue = todayOrders.reduce((sum, order) => sum + parseFloat(order.totalAmount || "0"), 0);
+  const pendingOrders = filteredOrders.filter((order: any) => order.status === "pending");
+  const todayRevenue = todayOrders.reduce((sum: number, order: any) => sum + parseFloat(order.totalAmount || "0"), 0);
   
   // Debug logging for mobile app
   if (isAndroid) {
@@ -976,28 +976,28 @@ export default function Admin() {
   }
   
   // Analytics data
-  const weeklyOrders = filteredOrders.filter(order => {
+  const weeklyOrders = filteredOrders.filter((order: any) => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     return order.createdAt && new Date(order.createdAt) >= weekAgo;
   });
   
-  const monthlyOrders = filteredOrders.filter(order => {
+  const monthlyOrders = filteredOrders.filter((order: any) => {
     const monthAgo = new Date();
     monthAgo.setMonth(monthAgo.getMonth() - 1);
     return order.createdAt && new Date(order.createdAt) >= monthAgo;
   });
   
-  const monthlyRevenue = monthlyOrders.reduce((sum, order) => sum + parseFloat(order.totalAmount || "0"), 0);
-  const weeklyRevenue = weeklyOrders.reduce((sum, order) => sum + parseFloat(order.totalAmount || "0"), 0);
+  const monthlyRevenue = monthlyOrders.reduce((sum: number, order: any) => sum + parseFloat(order.totalAmount || "0"), 0);
+  const weeklyRevenue = weeklyOrders.reduce((sum: number, order: any) => sum + parseFloat(order.totalAmount || "0"), 0);
     
   const averageOrderValue = filteredOrders.length > 0 
-    ? filteredOrders.reduce((sum, order) => sum + parseFloat(order.totalAmount || "0"), 0) / filteredOrders.length 
+    ? filteredOrders.reduce((sum: number, order: any) => sum + parseFloat(order.totalAmount || "0"), 0) / filteredOrders.length 
     : 0;
   
   // Calculate most ordered items from orders
   const itemOrderCounts: Record<string, { count: number; revenue: number; name: string; nameEn: string }> = {};
-  filteredOrders.forEach(order => {
+  filteredOrders.forEach((order: any) => {
     if (order.items && Array.isArray(order.items)) {
       order.items.forEach((item: any) => {
         const itemId = item.id || item.menuItemId;
@@ -1016,7 +1016,7 @@ export default function Admin() {
   });
   
   const topMenuItems = Object.entries(itemOrderCounts)
-    .sort((a, b) => b[1].count - a[1].count)
+    .sort((a: any, b: any) => b[1].count - a[1].count)
     .slice(0, 10)
     .map(([id, data]) => ({
       id,
@@ -1027,17 +1027,17 @@ export default function Admin() {
     }));
   
   const ordersByStatus = {
-    pending: filteredOrders.filter(o => o.status === "pending").length,
-    accepted: filteredOrders.filter(o => o.status === "accepted").length,
-    preparing: filteredOrders.filter(o => o.status === "preparing").length,
-    ready: filteredOrders.filter(o => o.status === "ready").length,
-    delivered: filteredOrders.filter(o => o.status === "delivered").length,
-    cancelled: filteredOrders.filter(o => o.status === "cancelled").length,
+    pending: filteredOrders.filter((o: any) => o.status === "pending").length,
+    accepted: filteredOrders.filter((o: any) => o.status === "accepted").length,
+    preparing: filteredOrders.filter((o: any) => o.status === "preparing").length,
+    ready: filteredOrders.filter((o: any) => o.status === "ready").length,
+    delivered: filteredOrders.filter((o: any) => o.status === "delivered").length,
+    cancelled: filteredOrders.filter((o: any) => o.status === "cancelled").length,
   };
   
   // Payment method analytics
   const paymentMethodStats: Record<string, { count: number; revenue: number }> = {};
-  filteredOrders.forEach(order => {
+  filteredOrders.forEach((order: any) => {
     const method = order.paymentMethod || 'cash_or_card';
     const status = order.paymentStatus || 'pending';
     if (!paymentMethodStats[method]) {
@@ -1051,30 +1051,30 @@ export default function Admin() {
   
   // Order type analytics (delivery vs pickup)
   const orderTypeStats = {
-    delivery: filteredOrders.filter(o => o.deliveryMethod === 'delivery').length,
-    pickup: filteredOrders.filter(o => o.deliveryMethod === 'pickup').length,
+    delivery: filteredOrders.filter((o: any) => o.deliveryMethod === 'delivery').length,
+    pickup: filteredOrders.filter((o: any) => o.deliveryMethod === 'pickup').length,
     deliveryRevenue: filteredOrders
-      .filter(o => o.deliveryMethod === 'delivery')
-      .reduce((sum, o) => sum + parseFloat(o.totalAmount || "0"), 0),
+      .filter((o: any) => o.deliveryMethod === 'delivery')
+      .reduce((sum: number, o: any) => sum + parseFloat(o.totalAmount || "0"), 0),
     pickupRevenue: filteredOrders
-      .filter(o => o.deliveryMethod === 'pickup')
-      .reduce((sum, o) => sum + parseFloat(o.totalAmount || "0"), 0),
+      .filter((o: any) => o.deliveryMethod === 'pickup')
+      .reduce((sum: number, o: any) => sum + parseFloat(o.totalAmount || "0"), 0),
   };
   
   // Hourly distribution
   const ordersByHour: Record<number, number> = {};
-  filteredOrders.forEach(order => {
+  filteredOrders.forEach((order: any) => {
     if (order.createdAt) {
       const hour = new Date(order.createdAt).getHours();
       ordersByHour[hour] = (ordersByHour[hour] || 0) + 1;
     }
   });
   
-  const peakHour = Object.entries(ordersByHour).sort((a, b) => b[1] - a[1])[0];
+  const peakHour = Object.entries(ordersByHour).sort((a: any, b: any) => b[1] - a[1])[0];
   
   // Success rate
-  const completedOrders = filteredOrders.filter(o => o.status === 'delivered').length;
-  const cancelledOrders = filteredOrders.filter(o => o.status === 'cancelled').length;
+  const completedOrders = filteredOrders.filter((o: any) => o.status === 'delivered').length;
+  const cancelledOrders = filteredOrders.filter((o: any) => o.status === 'cancelled').length;
   const successRate = filteredOrders.length > 0 
     ? ((completedOrders / filteredOrders.length) * 100).toFixed(1)
     : '0';
@@ -1476,7 +1476,7 @@ export default function Admin() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {filteredOrders.map((order) => (
+                    {filteredOrders.map((order: any) => (
                       <Card 
                         key={order.id} 
                         className="border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow cursor-pointer"
@@ -1637,7 +1637,7 @@ export default function Admin() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">{adminT("Kaikki kategoriat", "All categories", "جميع الفئات")}</SelectItem>
-                      {categories?.map((category) => (
+                      {categories?.map((category: any) => (
                         <SelectItem key={category.id} value={category.id.toString()}>
                           {language === "en" ? category.nameEn : category.name}
                         </SelectItem>
@@ -1672,7 +1672,7 @@ export default function Admin() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredMenuItems.map((item) => (
+                    {filteredMenuItems.map((item: any) => (
                       <Card 
                         key={item.id} 
                         className={`border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 overflow-hidden relative ${
@@ -1902,7 +1902,7 @@ export default function Admin() {
                       </div>
                     ) : (
                       Object.entries(paymentMethodStats)
-                        .sort((a, b) => b[1].revenue - a[1].revenue)
+                        .sort((a: any, b: any) => b[1].revenue - a[1].revenue)
                         .map(([method, data]) => {
                           const percentage = filteredOrders.length > 0 ? (data.count / filteredOrders.length) * 100 : 0;
                           const methodName = method === 'cash_or_card' 
@@ -2129,7 +2129,7 @@ export default function Admin() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {filteredOrders.slice(0, 5).map((order) => (
+                  {filteredOrders.slice(0, 5).map((order: any) => (
                     <div key={order.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                       <div className="flex items-center space-x-3">
                         <Badge className={getStatusColor(order.status)}>
@@ -2352,9 +2352,9 @@ export default function Admin() {
               });
             } else {
               // Creating new product - find next displayOrder for the category
-              const categoryItems = menuItems?.filter(item => item.categoryId === productData.categoryId) || [];
+              const categoryItems = menuItems?.filter((item: any) => item.categoryId === productData.categoryId) || [];
               const maxDisplayOrder = categoryItems.length > 0 
-                ? Math.max(...categoryItems.map(item => item.displayOrder || 0))
+                ? Math.max(...categoryItems.map((item: any) => item.displayOrder || 0))
                 : 0;
               
               await createMenuItem.mutateAsync({

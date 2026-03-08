@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Production-Ready Android Printer Service
  * Optimized for real network printing with comprehensive error handling

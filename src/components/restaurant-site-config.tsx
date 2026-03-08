@@ -32,6 +32,40 @@ interface RestaurantSiteConfigProps {
   onClose?: () => void;
 }
 
+interface DayHours {
+  open: string;
+  close: string;
+  closed: boolean;
+}
+
+interface HoursConfig {
+  general: Record<string, DayHours>;
+  pickup: Record<string, DayHours>;
+  delivery: Record<string, DayHours>;
+  [key: string]: Record<string, DayHours>;
+}
+
+interface FormData {
+  name: string;
+  nameEn: string;
+  tagline: string;
+  taglineEn: string;
+  description: string;
+  descriptionEn: string;
+  phone: string;
+  email: string;
+  address: Record<string, string>;
+  socialMedia: Record<string, string>;
+  hours: HoursConfig;
+  services: Record<string, any>;
+  deliveryConfig: Record<string, any>;
+  theme: Record<string, any>;
+  logo: Record<string, any>;
+  about: Record<string, any>;
+  hero: Record<string, any>;
+  [key: string]: any;
+}
+
 export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -42,7 +76,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
   const activateConfig = useActivateRestaurantConfig();
 
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     // Basic Info
     name: "",
     nameEn: "",
@@ -185,11 +219,11 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
     if (restaurantConfig) {
       setFormData({
         name: restaurantConfig.name || "",
-        nameEn: restaurantConfig.nameEn || "",
+        nameEn: restaurantConfig.name_en || "",
         tagline: restaurantConfig.tagline || "",
-        taglineEn: restaurantConfig.taglineEn || "",
+        taglineEn: restaurantConfig.tagline_en || "",
         description: restaurantConfig.description || "",
-        descriptionEn: restaurantConfig.descriptionEn || "",
+        descriptionEn: restaurantConfig.description_en || "",
         phone: restaurantConfig.phone || "",
         email: restaurantConfig.email || "",
         address: {
@@ -200,8 +234,8 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
         },
         socialMedia: {
           ...formData.socialMedia,
-          ...(typeof restaurantConfig.socialMedia === 'object' && restaurantConfig.socialMedia !== null 
-            ? restaurantConfig.socialMedia 
+          ...(typeof restaurantConfig.social_media === 'object' && restaurantConfig.social_media !== null 
+            ? restaurantConfig.social_media 
             : {})
         },
         hours: {
@@ -218,8 +252,8 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
         },
         deliveryConfig: {
           ...formData.deliveryConfig,
-          ...(typeof restaurantConfig.deliveryConfig === 'object' && restaurantConfig.deliveryConfig !== null 
-            ? restaurantConfig.deliveryConfig 
+          ...(typeof restaurantConfig.delivery_config === 'object' && restaurantConfig.delivery_config !== null 
+            ? restaurantConfig.delivery_config 
             : {})
         },
         theme: {
@@ -252,9 +286,26 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
 
   const handleSave = async () => {
     try {
+      // Transform camelCase formData to snake_case for database
       const configData = {
-        ...formData,
-        isActive: true
+        name: formData.name,
+        name_en: formData.nameEn,
+        tagline: formData.tagline,
+        tagline_en: formData.taglineEn,
+        description: formData.description,
+        description_en: formData.descriptionEn,
+        phone: formData.phone,
+        email: formData.email,
+        address: formData.address,
+        social_media: formData.socialMedia,
+        hours: formData.hours,
+        services: formData.services,
+        delivery_config: formData.deliveryConfig,
+        theme: formData.theme,
+        logo: formData.logo,
+        about: formData.about,
+        hero: formData.hero,
+        is_active: true,
       };
 
       if (restaurantConfig?.id) {
@@ -283,9 +334,9 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
     }
   };
 
-  const generateDayHours = (defaultOpen = "10:30", defaultClose = "10:29") => {
+  const generateDayHours = (defaultOpen = "10:30", defaultClose = "10:29"): Record<string, { open: string; close: string; closed: boolean }> => {
     const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-    const hours = {};
+    const hours: Record<string, { open: string; close: string; closed: boolean }> = {};
     days.forEach(day => {
       hours[day] = { open: defaultOpen, close: defaultClose, closed: false };
     });
@@ -827,7 +878,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
               <div className="space-y-4">
                 <h4 className="text-md font-semibold">Delivery Zones</h4>
                 <div className="space-y-2">
-                  {formData.deliveryConfig.zones.map((zone, index) => (
+                  {formData.deliveryConfig.zones.map((zone: any, index: number) => (
                     <div key={index} className="flex items-center gap-4 p-3 border rounded-lg">
                       <div className="flex-1">
                         <Label>Max Distance (km)</Label>
@@ -864,7 +915,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
                         variant="outline"
                         size="sm"
                         onClick={() => {
-                          const newZones = formData.deliveryConfig.zones.filter((_, i) => i !== index);
+                          const newZones = formData.deliveryConfig.zones.filter((_: any, i: number) => i !== index);
                           setFormData({
                             ...formData,
                             deliveryConfig: { ...formData.deliveryConfig, zones: newZones }
@@ -1361,7 +1412,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
                 </div>
 
                 <div className="space-y-4">
-                  {formData.about.specialties?.map((specialty, index) => (
+                  {formData.about.specialties?.map((specialty: any, index: number) => (
                     <Card key={index} className="p-4">
                       <div className="flex items-start justify-between mb-3">
                         <h4 className="font-medium">Specialty {index + 1}</h4>
@@ -1369,7 +1420,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            const newSpecialties = formData.about.specialties?.filter((_, i) => i !== index);
+                            const newSpecialties = formData.about.specialties?.filter((_: any, i: number) => i !== index);
                             setFormData({
                               ...formData,
                               about: { ...formData.about, specialties: newSpecialties }
@@ -1533,7 +1584,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
                 </div>
 
                 <div className="space-y-3">
-                  {formData.hero.features?.map((feature, index) => (
+                  {formData.hero.features?.map((feature: any, index: number) => (
                     <div key={index} className="flex items-center gap-4 p-3 border rounded-lg">
                       <Input
                         value={feature.title}
@@ -1578,7 +1629,7 @@ export function RestaurantSiteConfig({ onClose }: RestaurantSiteConfigProps) {
                         variant="outline"
                         size="sm"
                         onClick={() => {
-                          const newFeatures = formData.hero.features?.filter((_, i) => i !== index);
+                          const newFeatures = formData.hero.features?.filter((_: any, i: number) => i !== index);
                           setFormData({
                             ...formData,
                             hero: { ...formData.hero, features: newFeatures }

@@ -92,7 +92,8 @@ export function PaymentMethodsModal({ isOpen, onClose, onOpenStripeSettings }: P
     try {
       // Save payment settings to database
       await updateSettings.mutateAsync({
-        paymentMethods: paymentMethods,
+        id: restaurantSettings?.id || 1,
+        payment_methods: paymentMethods,
       });
 
       // Save to localStorage (legacy)

@@ -18,14 +18,34 @@ export interface RestaurantSettings {
   estimated_pickup_time?: number;
   estimated_delivery_time?: number;
   max_delivery_distance?: number;
+  // Stripe settings (snake_case)
   stripe_enabled?: boolean;
   stripe_test_mode?: boolean;
+  stripe_publishable_key?: string;
+  stripe_secret_key?: string;
+  stripe_webhook_secret?: string;
+  stripe_connect_account_id?: string;
+  stripe_account_email?: string;
+  stripe_account_country?: string;
+  stripe_payment_methods_config?: any;
+  // Payment settings
+  payment_methods?: any[];
+  online_payment_service_fee?: number;
+  online_payment_service_fee_type?: string;
+  // Other settings
   special_message?: string;
   special_message_en?: string;
   receipt_format?: string;
   direct_print_enabled?: boolean;
+  default_printer_id?: string;
+  printer_auto_reconnect?: boolean;
+  printer_tab_sticky?: boolean;
+  monthly_report_email?: string;
+  monthly_report_enabled?: boolean;
   created_at?: string;
   updated_at?: string;
+  // Allow dynamic access
+  [key: string]: any;
 }
 
 // Get restaurant settings

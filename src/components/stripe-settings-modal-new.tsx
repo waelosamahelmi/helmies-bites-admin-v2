@@ -114,12 +114,13 @@ export function StripeSettingsModal({ isOpen, onClose, onConfigured }: StripeSet
 
     try {
       await updateSettings.mutateAsync({
-        stripePublishableKey: publishableKey,
-        stripeSecretKey: secretKey,
-        stripeWebhookSecret: webhookSecret,
-        stripeTestMode: testMode,
-        stripeConnectAccountId: connectAccountId,
-        stripeEnabled: !!(publishableKey && secretKey),
+        id: restaurantSettings?.id || 1,
+        stripe_publishable_key: publishableKey,
+        stripe_secret_key: secretKey,
+        stripe_webhook_secret: webhookSecret,
+        stripe_test_mode: testMode,
+        stripe_connect_account_id: connectAccountId,
+        stripe_enabled: !!(publishableKey && secretKey),
       });
 
       toast({

@@ -40,8 +40,8 @@ export function CheckoutModal({ isOpen, onClose, onBack }: CheckoutModalProps) {
   ]);
   
   useEffect(() => {
-    if (restaurantSettings?.paymentMethods && Array.isArray(restaurantSettings.paymentMethods)) {
-      setAvailablePaymentMethods(restaurantSettings.paymentMethods.filter((m: any) => m.enabled));
+    if (restaurantSettings?.paymentMethods && Array.isArray(restaurantSettings.payment_methods)) {
+      setAvailablePaymentMethods(restaurantSettings.payment_methods.filter((m: any) => m.enabled));
     }
   }, [restaurantSettings]);
 
@@ -118,7 +118,7 @@ export function CheckoutModal({ isOpen, onClose, onBack }: CheckoutModalProps) {
   
   // Get minimum order from config for delivery only (pickup has no minimum)
   const minimumOrderDelivery = formData.orderType === "delivery" 
-    ? (restaurantConfig?.deliveryConfig?.minimumOrderDelivery || 15.00)
+    ? (restaurantConfig?.delivery_config?.minimumOrderDelivery || 15.00)
     : 0;
   
   // Long distance minimum (over 10km)
@@ -166,9 +166,6 @@ export function CheckoutModal({ isOpen, onClose, onBack }: CheckoutModalProps) {
     // Process regular order
     await processOrder();
   };
-
-  const processOrder = async (paymentIntentId?: string) => {
-    }
 
   const processOrder = async (paymentIntentId?: string) => {
     try {
@@ -408,7 +405,7 @@ export function CheckoutModal({ isOpen, onClose, onBack }: CheckoutModalProps) {
               onValueChange={(value) => handleInputChange("paymentMethod", value)}
             >
               <div className="space-y-3">
-                {availablePaymentMethods.map((method) => {
+                {availablePaymentMethods.map((method: any) => {
                   // Dynamically select icon based on method.icon value
                   const PaymentIcon = 
                     method.icon === 'banknote' ? Banknote :

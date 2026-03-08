@@ -70,19 +70,19 @@ export function StripeSettingsModal({ isOpen, onClose }: StripeSettingsModalProp
   // Load settings when modal opens
   useEffect(() => {
     if (isOpen && restaurantSettings) {
-      setStripeEnabled(restaurantSettings.stripeEnabled ?? false);
-      setStripePublishableKey(restaurantSettings.stripePublishableKey ?? '');
-      setStripeSecretKey(restaurantSettings.stripeSecretKey ?? '');
-      setStripeWebhookSecret(restaurantSettings.stripeWebhookSecret ?? '');
-      setStripeTestMode(restaurantSettings.stripeTestMode ?? true);
-      setStripeConnectAccountId(restaurantSettings.stripeConnectAccountId ?? '');
+      setStripeEnabled(restaurantSettings.stripe_enabled ?? false);
+      setStripePublishableKey(restaurantSettings.stripe_publishable_key ?? '');
+      setStripeSecretKey(restaurantSettings.stripe_secret_key ?? '');
+      setStripeWebhookSecret(restaurantSettings.stripe_webhook_secret ?? '');
+      setStripeTestMode(restaurantSettings.stripe_test_mode ?? true);
+      setStripeConnectAccountId(restaurantSettings.stripe_connect_account_id ?? '');
       
       // Load payment methods config
-      if (restaurantSettings.stripePaymentMethodsConfig) {
+      if (restaurantSettings.stripe_payment_methods_config) {
         try {
-          const config = typeof restaurantSettings.stripePaymentMethodsConfig === 'string' 
-            ? JSON.parse(restaurantSettings.stripePaymentMethodsConfig)
-            : restaurantSettings.stripePaymentMethodsConfig;
+          const config = typeof restaurantSettings.stripe_payment_methods_config === 'string' 
+            ? JSON.parse(restaurantSettings.stripe_payment_methods_config)
+            : restaurantSettings.stripe_payment_methods_config;
           setPaymentMethodsConfig({ ...paymentMethodsConfig, ...config });
         } catch (error) {
           console.error('Error parsing payment methods config:', error);
@@ -90,11 +90,11 @@ export function StripeSettingsModal({ isOpen, onClose }: StripeSettingsModalProp
       }
       
       // Check if connected
-      if (restaurantSettings.stripeConnectAccountId) {
+      if (restaurantSettings.stripe_connect_account_id) {
         setIsConnected(true);
         // In a real implementation, you'd fetch account details from Stripe
-        setAccountEmail(restaurantSettings.stripeAccountEmail ?? '');
-        setAccountCountry(restaurantSettings.stripeAccountCountry ?? 'FI');
+        setAccountEmail(restaurantSettings.stripe_account_email ?? '');
+        setAccountCountry(restaurantSettings.stripe_account_country ?? 'FI');
       }
     }
   }, [isOpen, restaurantSettings]);
@@ -122,9 +122,10 @@ export function StripeSettingsModal({ isOpen, onClose }: StripeSettingsModalProp
   const handleDisconnectStripe = async () => {
     try {
       await updateSettings.mutateAsync({
-        stripeConnectAccountId: null,
-        stripeAccountEmail: null,
-        stripeAccountCountry: null,
+        id: restaurantSettings?.id || 1,
+        stripe_connect_account_id: null,
+        stripe_account_email: null,
+        stripe_account_country: null,
       });
       
       setIsConnected(false);
@@ -252,16 +253,17 @@ export function StripeSettingsModal({ isOpen, onClose }: StripeSettingsModalProp
 
       // Save Stripe settings to database
       await updateSettings.mutateAsync({
-        stripeEnabled: stripeEnabled,
-        stripePublishableKey: stripePublishableKey,
-        stripeSecretKey: stripeSecretKey,
-        stripeWebhookSecret: stripeWebhookSecret,
-        stripeTestMode: stripeTestMode,
-        stripeConnectAccountId: stripeConnectAccountId,
-        stripeAccountEmail: accountEmail,
-        stripeAccountCountry: accountCountry,
-        stripePaymentMethodsConfig: JSON.stringify(paymentMethodsConfig),
-        paymentMethods: updatedPaymentMethods,
+        id: restaurantSettings?.id || 1,
+        stripe_enabled: stripeEnabled,
+        stripe_publishable_key: stripePublishableKey,
+        stripe_secret_key: stripeSecretKey,
+        stripe_webhook_secret: stripeWebhookSecret,
+        stripe_test_mode: stripeTestMode,
+        stripe_connect_account_id: stripeConnectAccountId,
+        stripe_account_email: accountEmail,
+        stripe_account_country: accountCountry,
+        stripe_payment_methods_config: JSON.stringify(paymentMethodsConfig),
+        payment_methods: updatedPaymentMethods,
       });
 
       // Save to localStorage (legacy)

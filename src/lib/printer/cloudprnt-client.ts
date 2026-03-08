@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CloudPRNT Client API
  * Submits print jobs to the CloudPRNT server

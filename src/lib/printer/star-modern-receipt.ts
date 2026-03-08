@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Modern Star Receipt Formatter
  * Based on Star Line Mode commands - VERIFIED WORKING

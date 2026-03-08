@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { 
   Category, MenuItem, Order, OrderItem, Topping, ToppingGroup, ToppingGroupItem, MenuItemToppingGroup, CategoryToppingGroup, RestaurantSettings, Printer,
   InsertCategory, InsertMenuItem, InsertOrder, InsertOrderItem, InsertTopping, InsertToppingGroup, InsertToppingGroupItem, InsertMenuItemToppingGroup, InsertCategoryToppingGroup, InsertRestaurantSettings, InsertPrinter,

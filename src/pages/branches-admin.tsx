@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Store, Edit, Clock, MapPin } from "lucide-react";
 import { Header } from "@/components/header";
+import { CartModal as Cart } from "@/components/cart-modal";
 
 interface Branch {
   id: number;
@@ -27,13 +28,14 @@ interface Branch {
   is_active: boolean;
   display_order: number;
   opening_hours: {
-    monday: { open: string; close: string; closed: boolean };
-    tuesday: { open: string; close: string; closed: boolean };
-    wednesday: { open: string; close: string; closed: boolean };
-    thursday: { open: string; close: string; closed: boolean };
-    friday: { open: string; close: string; closed: boolean };
-    saturday: { open: string; close: string; closed: boolean };
-    sunday: { open: string; close: string; closed: boolean };
+    monday?: { open: string; close: string; closed: boolean };
+    tuesday?: { open: string; close: string; closed: boolean };
+    wednesday?: { open: string; close: string; closed: boolean };
+    thursday?: { open: string; close: string; closed: boolean };
+    friday?: { open: string; close: string; closed: boolean };
+    saturday?: { open: string; close: string; closed: boolean };
+    sunday?: { open: string; close: string; closed: boolean };
+    [key: string]: { open: string; close: string; closed: boolean } | undefined;
   } | null;
   created_at: string;
   updated_at: string;
@@ -237,7 +239,7 @@ export default function BranchesAdmin() {
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                     {branch.opening_hours && DAYS.map((day) => {
-                      const hours = branch.opening_hours![day as keyof typeof branch.opening_hours];
+                      const hours = branch.opening_hours?.[day] ?? { open: '09:00', close: '21:00', closed: false };
                       return (
                         <div key={day} className="flex flex-col p-2 bg-gray-50 dark:bg-gray-800 rounded">
                           <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -277,7 +279,7 @@ export default function BranchesAdmin() {
             {editingBranch && editingBranch.opening_hours && (
               <div className="space-y-4">
                 {DAYS.map((day) => {
-                  const hours = editingBranch.opening_hours![day as keyof typeof editingBranch.opening_hours];
+                  const hours = editingBranch.opening_hours?.[day] ?? { open: '09:00', close: '21:00', closed: false };
                   return (
                     <div key={day} className="flex items-center gap-4 p-4 border rounded-lg">
                       <div className="w-32">
@@ -290,9 +292,10 @@ export default function BranchesAdmin() {
                         <Switch
                           checked={!hours.closed}
                           onCheckedChange={(checked) => {
-                            const newHours = { ...editingBranch.opening_hours };
-                            newHours[day as keyof typeof newHours] = {
-                              ...hours,
+                            const newHours = { ...editingBranch.opening_hours } as any;
+                            newHours[day] = {
+                              open: hours.open ?? '09:00',
+                              close: hours.close ?? '21:00',
                               closed: !checked,
                             };
                             setEditingBranch({ ...editingBranch, opening_hours: newHours });
@@ -309,12 +312,13 @@ export default function BranchesAdmin() {
                             <Label className="text-xs">{t("Avaus", "Open")}</Label>
                             <Input
                               type="time"
-                              value={hours.open}
+                              value={hours.open ?? '09:00'}
                               onChange={(e) => {
-                                const newHours = { ...editingBranch.opening_hours };
-                                newHours[day as keyof typeof newHours] = {
-                                  ...hours,
+                                const newHours = { ...editingBranch.opening_hours } as any;
+                                newHours[day] = {
                                   open: e.target.value,
+                                  close: hours.close ?? '21:00',
+                                  closed: hours.closed ?? false,
                                 };
                                 setEditingBranch({ ...editingBranch, opening_hours: newHours });
                               }}
@@ -325,12 +329,13 @@ export default function BranchesAdmin() {
                             <Label className="text-xs">{t("Sulku", "Close")}</Label>
                             <Input
                               type="time"
-                              value={hours.close}
+                              value={hours.close ?? '21:00'}
                               onChange={(e) => {
-                                const newHours = { ...editingBranch.opening_hours };
-                                newHours[day as keyof typeof newHours] = {
-                                  ...hours,
+                                const newHours = { ...editingBranch.opening_hours } as any;
+                                newHours[day] = {
+                                  open: hours.open ?? '09:00',
                                   close: e.target.value,
+                                  closed: hours.closed ?? false,
                                 };
                                 setEditingBranch({ ...editingBranch, opening_hours: newHours });
                               }}
@@ -366,7 +371,7 @@ export default function BranchesAdmin() {
         </Dialog>
       </div>
 
-      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} onCheckout={() => {}} />
     </div>
   );
 }

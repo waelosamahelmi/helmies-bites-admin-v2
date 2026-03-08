@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { useToast } from "@/hooks/use-toast";

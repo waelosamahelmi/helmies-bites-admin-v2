@@ -69,8 +69,8 @@ export function RestaurantSettingsModal({ isOpen, onClose }: RestaurantSettingsM
 
   // Load minimum order from restaurant config
   useEffect(() => {
-    if (isOpen && restaurantConfig?.deliveryConfig) {
-      const minOrder = restaurantConfig.deliveryConfig.minimumOrderDelivery;
+    if (isOpen && restaurantConfig?.delivery_config) {
+      const minOrder = restaurantConfig.delivery_config.minimumOrderDelivery;
       if (minOrder !== undefined && minOrder !== null) {
         setMinimumOrderDelivery(minOrder.toString());
       }
@@ -98,21 +98,22 @@ export function RestaurantSettingsModal({ isOpen, onClose }: RestaurantSettingsM
     try {
       // Save restaurant settings to database
       await updateSettings.mutateAsync({
-        isOpen: isForceOpen,
-        isBusy: isBusy,
-        specialMessage: specialMessage,
-        openingHours: "Managed via Site Configuration",
-        pickupHours: "Managed via Site Configuration", 
-        deliveryHours: "Managed via Site Configuration",
-        lunchBuffetHours: "Managed via Site Configuration",
-        onlinePaymentServiceFee: parseFloat(serviceFee) || 0.00,
-        onlinePaymentServiceFeeType: serviceFeeType,
+        id: restaurantSettings?.id || 1,
+        is_open: isForceOpen,
+        is_busy: isBusy,
+        special_message: specialMessage,
+        opening_hours: "Managed via Site Configuration",
+        pickup_hours: "Managed via Site Configuration", 
+        delivery_hours: "Managed via Site Configuration",
+        lunch_buffet_hours: "Managed via Site Configuration",
+        online_payment_service_fee: parseFloat(serviceFee) || 0.00,
+        online_payment_service_fee_type: serviceFeeType,
       });
 
       // Save minimum order to restaurant config if it exists
       if (restaurantConfig?.id) {
         const updatedDeliveryConfig = {
-          ...(restaurantConfig.deliveryConfig || {}),
+          ...(restaurantConfig.delivery_config || {}),
           minimumOrderDelivery: parseFloat(minimumOrderDelivery) || 15.00,
         };
 

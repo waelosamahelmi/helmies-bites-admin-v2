@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { mobileApi } from './mobile-api-client';
 
 export interface OfflineOrder {

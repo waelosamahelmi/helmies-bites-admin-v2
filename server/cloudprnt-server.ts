@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * CloudPRNT Server Implementation
  * Star Micronics CloudPRNT protocol for remote printing

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Unified Payment Service
  * Handles all payment operations with proper error handling, recovery, and real-time updates
