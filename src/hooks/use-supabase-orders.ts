@@ -38,7 +38,7 @@ export function useSupabaseOrders() {
             menu_items (*)
           )
         `)
-        .eq('tenant_id', tenantId); // Tenant filter
+        .eq('restaurant_id', tenantId); // Tenant filter
       
       // Filter by user's branch if they have one assigned
       if (userBranch !== null && userBranch !== undefined) {
@@ -91,7 +91,7 @@ export function useSupabaseOrder(id: number) {
           )
         `)
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .single();
 
       if (error) {
@@ -155,7 +155,7 @@ export function useSupabaseUpdateOrderStatus() {
         .from('orders')
         .update(updateData)
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -188,7 +188,7 @@ export function useSupabaseDeleteOrder() {
         .from('orders')
         .delete()
         .eq('id', id)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (error) {
         console.error('❌ Failed to delete order:', error);

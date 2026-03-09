@@ -28,7 +28,7 @@ export function useSupabaseCategories() {
       const { data, error } = await supabase
         .from('categories')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .order('display_order', { ascending: true });
 
       if (error) {
@@ -58,7 +58,7 @@ export function useSupabaseMenuItems(categoryId?: number) {
       let query = supabase
         .from('menu_items')
         .select(`*, categories (*)`)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (categoryId) {
         query = query.eq('category_id', categoryId);
@@ -91,7 +91,7 @@ export function useSupabaseToppings(category?: string) {
       let query = supabase
         .from('toppings')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .eq('is_active', true);
 
       if (category) {
@@ -157,7 +157,7 @@ export function useSupabaseUpdateMenuItem() {
         .from('menu_items')
         .update({ ...updateData, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -188,7 +188,7 @@ export function useSupabaseDeleteMenuItem() {
         .from('menu_items')
         .delete()
         .eq('id', id)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (error) {
         console.error('❌ Failed to delete menu item:', error);
@@ -244,7 +244,7 @@ export function useSupabaseUpdateCategory() {
         .from('categories')
         .update(updateData)
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -274,7 +274,7 @@ export function useSupabaseDeleteCategory() {
         .from('categories')
         .delete()
         .eq('id', id)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (error) {
         console.error('❌ Failed to delete category:', error);
@@ -326,7 +326,7 @@ export function useSupabaseUpdateTopping() {
         .from('toppings')
         .update(updateData)
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -352,7 +352,7 @@ export function useSupabaseDeleteTopping() {
         .from('toppings')
         .delete()
         .eq('id', id)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (error) handleSupabaseError(error);
       return { id };
@@ -376,7 +376,7 @@ export function useSupabaseBranches() {
       const { data, error } = await supabase
         .from('branches')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .order('name', { ascending: true });
 
       if (error) handleSupabaseError(error);
@@ -423,7 +423,7 @@ export function useSupabaseUpdateBranch() {
         .from('branches')
         .update(updateData)
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -449,7 +449,7 @@ export function useSupabaseDeleteBranch() {
         .from('branches')
         .delete()
         .eq('id', id)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (error) handleSupabaseError(error);
       return { id };

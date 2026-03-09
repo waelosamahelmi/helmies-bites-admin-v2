@@ -61,7 +61,7 @@ export function useRestaurantSettings() {
       const { data, error } = await supabase
         .from('restaurant_settings')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .single();
 
       if (error && error.code !== 'PGRST116') {
@@ -87,7 +87,7 @@ export function useUpdateRestaurantSettings() {
         .from('restaurant_settings')
         .update({ ...updateData, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -113,7 +113,7 @@ export function useToggleRestaurantOpen() {
         .from('restaurant_settings')
         .update({ is_open, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -139,7 +139,7 @@ export function useToggleRestaurantBusy() {
         .from('restaurant_settings')
         .update({ is_busy, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -165,7 +165,7 @@ export function useCreateRestaurantSettings() {
         .from('restaurant_settings')
         .insert([{ 
           ...settingsData, 
-          tenant_id: tenantId,
+          restaurant_id: tenantId,
           is_open: settingsData.is_open ?? true,
           is_busy: settingsData.is_busy ?? false,
         }])

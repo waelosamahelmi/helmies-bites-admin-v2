@@ -16,7 +16,7 @@ export function useBranches() {
       const { data, error } = await supabase
         .from('branches')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .order('name', { ascending: true });
 
       if (error) throw new Error(error.message);
@@ -63,7 +63,7 @@ export function useUpdateBranch() {
         .from('branches')
         .update(updateData)
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -89,7 +89,7 @@ export function useDeleteBranch() {
         .from('branches')
         .delete()
         .eq('id', id)
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       if (error) throw new Error(error.message);
       return { id };

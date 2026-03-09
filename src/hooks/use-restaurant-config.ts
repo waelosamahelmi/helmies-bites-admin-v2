@@ -46,7 +46,7 @@ export function useRestaurantConfig() {
       const { data, error } = await supabase
         .from('restaurant_config')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .eq('is_active', true)
         .single();
 
@@ -73,7 +73,7 @@ export function useUpdateRestaurantConfig() {
         .from('restaurant_config')
         .update({ ...updateData, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
@@ -99,11 +99,11 @@ export function useCreateRestaurantConfig() {
       await supabase
         .from('restaurant_config')
         .update({ is_active: false })
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       const { data, error } = await supabase
         .from('restaurant_config')
-        .insert([{ ...configData, tenant_id: tenantId, is_active: true }])
+        .insert([{ ...configData, restaurant_id: tenantId, is_active: true }])
         .select()
         .single();
 
@@ -129,14 +129,14 @@ export function useActivateRestaurantConfig() {
       await supabase
         .from('restaurant_config')
         .update({ is_active: false })
-        .eq('tenant_id', tenantId);
+        .eq('restaurant_id', tenantId);
 
       // Activate the selected one
       const { data, error } = await supabase
         .from('restaurant_config')
         .update({ is_active: true, updated_at: new Date().toISOString() })
         .eq('id', id)
-        .eq('tenant_id', tenantId)
+        .eq('restaurant_id', tenantId)
         .select()
         .single();
 
